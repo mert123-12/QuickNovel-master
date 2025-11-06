@@ -17,15 +17,18 @@
             android:textColor="?attr/textColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_rowWeight="1"
             android:paddingTop="10dp" />
 
+    <!-- ✅ FIXED: Proper height for scrolling -->
     <ListView
-            android:layout_marginTop="-10dp"
-            android:paddingTop="10dp"
             android:id="@+id/sort_click"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
             android:background="?attr/primaryBlackBackground"
             tools:listitem="@layout/sort_bottom_single_choice"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 </LinearLayout>

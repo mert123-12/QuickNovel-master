@@ -880,20 +880,15 @@ class ReadActivityViewModel : ViewModel() {
         }
 
         try {
-            val builder = StringBuilder()
-            val out = ArrayList<TextSpan>()
-            for (span in spans) {
-                loading.invoke(Triple(span.index, span.innerIndex, spans.size))
-                val newText =
-                    Tasks.await(translator.translate(span.text.toString()))
-                val start = builder.length
-                builder.append(newText)
-                val end = builder.length
-                builder.append('\n')
-                out.add(TextSpan(newText.toSpanned(), start, end, span.index, span.innerIndex))
+            // Request translation for the whole text at once. This produces more
+            // natural translations (paragraph-by-paragraph) instead of translating
+            // each span/word individually.
+            // Send a single progress update for the chapter.
+            if (spans.isNotEmpty()) {
+                loading.invoke(Triple(spans[0].index, 1, 1))
             }
 
-            val mlRawText = builder.toString()
+            val mlRawText = Tasks.await(translator.translate(text.toString()))
 
             // atomically write the file
             safe {
@@ -905,7 +900,11 @@ class ReadActivityViewModel : ViewModel() {
                 }
             }
 
-            return mlRawText.toSpanned() to out
+            // Parse the translated full text back into spans (paragraphs)
+            val mlSpanned = mlRawText.toSpanned()
+            val out = parseTextToSpans(mlSpanned, spans.getOrNull(0)?.index ?: 0)
+
+            return mlSpanned to out
         } catch (t: ExecutionException) {
             throw t.cause ?: t
         }

@@ -117,14 +117,21 @@ class TTSSession(val context: Context, event: (TTSHelper.TTSActionType) -> Boole
         }
     }
 
+    private var hasDetectedLanguage = false
+
     suspend fun speak(
         line: TTSHelper.TTSLine,
         next: TTSHelper.TTSLine?,
         action: () -> Boolean
     ): Int? {
         return requireTTS({ tts ->
-            // ✅ REMOVED auto language detection - use user's selected language/voice
-
+            // ✅ Only auto-detect language once at the start
+            if (!hasDetectedLanguage) {
+                val detectedLocale = detectLanguage(line.speakOutMsg)
+                tts.setLanguage(detectedLocale)
+                hasDetectedLanguage = true
+            }
+            
             val ret: Int
             val queue = TTSQueue
             ret = if (queue?.first == line) {
