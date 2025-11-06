@@ -144,6 +144,25 @@ object SingleSelectionHelper {
         dismissCallback: () -> Unit,
         callback: (Int) -> Unit,
     ) {
+        // For very large lists (voices, languages), BottomSheet can be problematic
+        // and may not allow proper scrolling/selection on some devices. Fall back
+        // to the AlertDialog implementation for large lists which handles
+        // scrolling reliably.
+        val LARGE_LIST_THRESHOLD = 25
+        if (items.size > LARGE_LIST_THRESHOLD) {
+            // Use the AlertDialog-based flow which will inflate the same layout
+            // but be presented as a dialog with proper scrolling.
+            showDialog(
+                items,
+                selectedIndex,
+                name,
+                showApply,
+                dismissCallback,
+                callback
+            )
+            return
+        }
+
         val builder =
             BottomSheetDialog(this)
         builder.setContentView(R.layout.bottom_selection_dialog)
