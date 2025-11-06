@@ -1220,6 +1220,12 @@ class ReadActivityViewModel : ViewModel() {
     private fun initTTSSession(context: Context) {
         runOnMainThread {
             ttsSession = TTSSession(context, ::parseAction)
+            // apply saved tts speed to session if available
+            try {
+                ttsSession.setSpeechRate(ttsSpeed)
+            } catch (t: Throwable) {
+                // ignore if session not ready
+            }
         }
     }
 
@@ -1247,6 +1253,15 @@ class ReadActivityViewModel : ViewModel() {
 
     fun setTTSVoice(voice: Voice?) {
         ttsSession.setVoice(voice)
+    }
+
+    fun setTTSSpeed(rate: Float) {
+        ttsSpeed = rate
+        try {
+            ttsSession.setSpeechRate(rate)
+        } catch (t: Throwable) {
+            // session may not be initialized yet
+        }
     }
 
     fun pauseTTS() {
@@ -1747,6 +1762,15 @@ class ReadActivityViewModel : ViewModel() {
     )
 
     val ttsTimeRemaining: MutableLiveData<Long?> = MutableLiveData(null)
+
+    // TTS speed (1.0 = normal). Persisted preference and live data for UI binding.
+    val ttsSpeedLive: MutableLiveData<Float> = MutableLiveData(null)
+    var ttsSpeed by PreferenceDelegateLiveView(
+        EPUB_TTS_SPEED,
+        1.0f,
+        Float::class,
+        ttsSpeedLive
+    )
 
     val mlFromLanguageLive: MutableLiveData<String> = MutableLiveData(null)
     var mlFromLanguage by PreferenceDelegateLiveView(

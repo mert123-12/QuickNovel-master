@@ -163,6 +163,55 @@
                         android:layout_width="wrap_content" />
             </LinearLayout>
 
+            <TextView
+                    android:layout_marginTop="15dp"
+                    android:text="TTS Speed"
+                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                <ImageView
+                        app:layout_constraintEnd_toStartOf="@id/read_settings_tts_speed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:src="@drawable/ic_baseline_volume_up_24"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:contentDescription="TTS slower" />
+
+                <SeekBar
+                        android:id="@+id/read_settings_tts_speed"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:thumbTint="?attr/colorOnPrimary"
+                        android:progressTint="?attr/colorOnPrimary"
+
+                        android:progress="100"
+                        android:max="150"
+                        android:layout_marginStart="30dp"
+                        android:layout_marginEnd="30dp"
+                        android:layout_gravity="center_vertical"
+                        app:thumbRadius="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                <TextView
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/read_settings_tts_speed"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:id="@+id/read_settings_tts_speed_text"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:text="100%" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             <TextView
                     android:layout_marginTop="15dp"

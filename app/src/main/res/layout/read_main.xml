@@ -444,7 +444,7 @@
                         android:contentDescription="@string/read_action_tts"
                         android:padding="@dimen/screenEdgeMargin"
                         app:layout_constraintEnd_toStartOf="@id/tts_action_pause_play"
-                        app:layout_constraintStart_toEndOf="@+id/tts_action_back"
+                        app:layout_constraintStart_toEndOf="@id/tts_action_back"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_baseline_stop_24"
                         app:tint="?attr/white" />
@@ -456,22 +456,38 @@
                         android:background="@drawable/ripple_regular"
                         android:contentDescription="@string/read_action_chapters"
                         android:padding="@dimen/screenEdgeMargin"
-                        app:layout_constraintEnd_toStartOf="@id/tts_action_forward"
-                        app:layout_constraintStart_toEndOf="@+id/tts_action_stop"
+                        app:layout_constraintEnd_toStartOf="@id/tts_speed_1_5"
+                        app:layout_constraintStart_toEndOf="@id/tts_action_stop"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_baseline_pause_24"
                         app:tint="?attr/white" />
 
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/tts_speed_1_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:background="@drawable/ripple_regular"
+                        android:text="1.5x"
+                        android:textAllCaps="false"
+                        android:padding="8dp"
+                        android:layout_marginStart="4dp"
+                        app:layout_constraintStart_toEndOf="@id/tts_action_pause_play"
+                        app:layout_constraintEnd_toStartOf="@id/tts_action_forward"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        style="?attr/white" />
+
                 <ImageButton
-                        android:visibility="visible"
                         android:id="@+id/tts_action_forward"
+                        android:visibility="visible"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@drawable/ripple_regular"
                         android:contentDescription="@string/read_action_settings"
                         android:padding="@dimen/screenEdgeMargin"
+                        android:layout_marginStart="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/tts_action_pause_play"
+                        app:layout_constraintStart_toEndOf="@id/tts_speed_1_5"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_baseline_fast_forward_24"
                         app:tint="?attr/white" />

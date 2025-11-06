@@ -84,6 +84,23 @@ class TTSSession(val context: Context, event: (TTSHelper.TTSActionType) -> Boole
         tts.voice = voice ?: tts.defaultVoice
     }
 
+    /** Set speech rate for TTS. Persists the value and applies to the active TextToSpeech instance if initialized. */
+    fun setSpeechRate(rate: Float?) {
+        if (rate == null) {
+            removeKey(EPUB_TTS_SPEED)
+        } else {
+            // persist the value
+            setKey(EPUB_TTS_SPEED, rate)
+        }
+
+        val ttsLocal = tts ?: return
+        try {
+            ttsLocal.setSpeechRate(rate ?: 1.0f)
+        } catch (t: Throwable) {
+            // ignore failures setting speech rate
+        }
+    }
+
     fun interruptTTS() {
         // we don't actually want to initialize tts here
         tts?.let { tts ->

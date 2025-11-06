@@ -810,6 +810,51 @@ class ReadActivity2 : AppCompatActivity(), ColorPickerDialogListener {
             viewModel.forwardsTTS()
         }
 
+        // Quick TTS speed preset button (single 1.5x preset)
+        binding.ttsSpeed15.setOnClickListener {
+            // apply preset immediately
+            viewModel.setTTSSpeed(1.5f)
+
+            // show a compact bottom sheet that only contains the TTS speed seekbar
+            try {
+                val sheet = BottomSheetDialog(this)
+                val view = layoutInflater.inflate(R.layout.read_bottom_tts_speed_only, null)
+                sheet.setContentView(view)
+
+                val seek = view.findViewById<android.widget.SeekBar>(R.id.read_only_tts_speed)
+                val txt = view.findViewById<android.widget.TextView>(R.id.read_only_tts_speed_text)
+
+                val savedRate = viewModel.ttsSpeed
+                val startPercent = (savedRate * 100f).toInt().coerceIn(50, 200)
+                seek.progress = startPercent - 50
+                txt.text = "${startPercent}%"
+
+                seek.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+                        val actual = (progress + 50) / 100f
+                        txt.text = "${(actual * 100).toInt()}%"
+                        if (fromUser) {
+                            viewModel.setTTSSpeed(actual)
+                        }
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
+                    override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {}
+                })
+
+                sheet.show()
+            } catch (t: Throwable) {
+                // fallback: open full settings if anything fails
+                binding.readActionSettings.performClick()
+            }
+        }
+
+        // long-press the preset to open the full settings dialog for advanced edits
+        binding.ttsSpeed15.setOnLongClickListener {
+            binding.readActionSettings.performClick()
+            true
+        }
+
         binding.ttsActionBack.setOnClickListener {
             viewModel.backwardsTTS()
         }
@@ -1451,6 +1496,37 @@ class ReadActivity2 : AppCompatActivity(), ColorPickerDialogListener {
                 readSettingsKeepScreenActive.isChecked = viewModel.screenAwake
                 readSettingsKeepScreenActive.setOnCheckedChangeListener { _, isChecked ->
                     viewModel.screenAwake = isChecked
+                }
+
+                // TTS speed control wiring
+                try {
+                    val savedRate = viewModel.ttsSpeed
+                    val startPercent = (savedRate * 100f).toInt().coerceIn(50, 200)
+                    readSettingsTtsSpeed.progress = startPercent - 50
+                    readSettingsTtsSpeedText.text = "${startPercent}%"
+
+                    readSettingsTtsSpeed.setOnSeekBarChangeListener(object : android.widget.SeekBar.OnSeekBarChangeListener {
+                        override fun onProgressChanged(seekBar: android.widget.SeekBar?, progress: Int, fromUser: Boolean) {
+                            val actual = (progress + 50) / 100f
+                            readSettingsTtsSpeedText.text = "${(actual * 100).toInt()}%"
+                            if (fromUser) {
+                                viewModel.setTTSSpeed(actual)
+                            }
+                        }
+
+                        override fun onStartTrackingTouch(seekBar: android.widget.SeekBar?) {}
+                        override fun onStopTrackingTouch(seekBar: android.widget.SeekBar?) {}
+                    })
+
+                    readSettingsTtsSpeed.setOnLongClickListener {
+                        // reset to normal speed
+                        readSettingsTtsSpeed.progress = 100 - 50
+                        readSettingsTtsSpeedText.text = "100%"
+                        viewModel.setTTSSpeed(1.0f)
+                        true
+                    }
+                } catch (t: Throwable) {
+                    // ignore UI wiring errors
                 }
             }
 
