@@ -29,7 +29,7 @@ Adfree FOSS Android app for downloading novels. It also functions as an Epub rea
 - https://sakuranovel.id
 - https://www.scribblehub.com
 - https://wtr-lab.com
-
+- https://novelokutr.net
 **Screenshoots:**
 
 <img src="./.github/home.jpg" height="400"/><img src="./.github/search.jpg" height="400"/><img src="./.github/downloads.jpg" height="400"/><img src="./.github/result.jpg" height="400"/><img src="./.github/reader.jpg" height="400"/>
